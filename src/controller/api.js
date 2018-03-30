@@ -4,7 +4,7 @@ module.exports = {
   },
   loginByWechat: async function(ctx, next) {
     // 1. 接收小程序参数 code,encryptedData,iv
-    // 2. 调用 `service/wechat.js` 的，实例化wechat还需要session_key，所以取session_key
+    // 2. 调用 `service/wechat.js` 的调用decryptData()，实例化wechat还需要session_key，所以取session_key
     // 3. https://api.weixin.qq.com/sns/jscode2session  params - appid, secret, code, grant_type -> session_key, openid
     // 4. 调用decryptData() 得到用户信息
     // 5. 查询openid，如果存在则为用户登录，不存在则新建用户。
