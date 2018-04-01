@@ -1,6 +1,6 @@
 const chai = require('chai')
 const expect = chai.expect
-const WechatService = require('../wechat')
+const wechatService = require('../wechat')
 
 var appId = 'wx4f4bc4dec97d474b'
 var sessionKey = 'tiihtNczf5v6AKRyjwEUhQ=='
@@ -25,6 +25,10 @@ var encryptedData =
 var iv = 'r7BXXKkLb8qrSNn05n0qiA=='
 
 describe('😈 service: wechat', () => {
+  beforeEach(() => {
+    process.env.wx_appid = appId
+  })
+
   it('解密微信数据 decryptData', () => {
     const decodeData = {
       openId: 'oGZUI0egBJY1zhBYw2KhdUfwVJJE',
@@ -40,9 +44,7 @@ describe('😈 service: wechat', () => {
       watermark: { timestamp: 1477314187, appid: 'wx4f4bc4dec97d474b' }
     }
 
-    const ws = new WechatService(appId, sessionKey)
-
-    const decode = ws.decryptData(encryptedData, iv)
+    const decode = wechatService.decryptData(sessionKey, encryptedData, iv)
 
     expect(decode).to.eql(decodeData)
   })

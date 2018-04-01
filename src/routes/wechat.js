@@ -1,11 +1,10 @@
 const Router = require('koa-router')
+const Api = require('../controller/api')
 
 const wechatRouter = new Router({
   prefix: '/api/wechat'
 })
 
-wechatRouter.get('/', async ctx => {
-  ctx.body = { message: 'hello world' }
-})
+wechatRouter.post('/loginByWechat', Api.loginByWechat)
 
 module.exports = wechatRouter

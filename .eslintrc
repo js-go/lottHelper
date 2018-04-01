@@ -1,0 +1,10 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "plugins": ["security"],
+  "extends": ["standard", "plugin:security/recommended"],
+  "rules": {
+    "camelcase": "off"
+  }
+}
