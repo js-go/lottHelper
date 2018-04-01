@@ -1,11 +1,20 @@
 require('dotenv').config()
 
-const app = require('../src/app')
+const { server, runDep } = require('../src/app')
 
 const PORT = process.env.PORT || 8080
 
-const server = app.listen(PORT, () => {
-  console.log(`Server listening on port: ${PORT}`)
-})
+runDep()
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`Server listening on port: ${PORT}`)
+    })
+  })
+  .catch(err => {
+    if (err) {
+      console.error('服务启动失败')
+      console.error(err)
+    }
+  })
 
 module.exports = server
