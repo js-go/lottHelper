@@ -1,13 +1,13 @@
 require('dotenv').config()
 
-const { server, runDep } = require('../src/app')
+const { server, runDependency } = require('../src/app')
 
 const PORT = process.env.PORT || 8080
 
-runDep()
+runDependency()
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`Server listening on port: ${PORT}`)
+      console.info(`Server listening on port: ${PORT}`)
     })
   })
   .catch(err => {
@@ -16,5 +16,3 @@ runDep()
       console.error(err)
     }
   })
-
-module.exports = server

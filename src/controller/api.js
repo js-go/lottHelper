@@ -2,7 +2,7 @@ const wechatService = require('../service/wechat')
 const JWT = require('jsonwebtoken')
 
 module.exports = {
-  index: async function (ctx, next) {
+  helloWorld: async function (ctx, next) {
     ctx.body = {
       message: 'hello world'
     }

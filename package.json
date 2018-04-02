@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./bin/index.js",
     "dev": "./node_modules/.bin/nodemon ./bin/index.js",
-    "test": "NODE_ENV=test ./node_modules/.bin/mocha ./src/**/**.test.js"
+    "test":
+      "NODE_ENV=test ./node_modules/.bin/mocha -r ./test/env.js ./src/**/**.test.js"
   },
   "author": "js:go",
   "license": "MIT",

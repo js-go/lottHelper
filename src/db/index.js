@@ -7,6 +7,7 @@ const options = {
   host: process.env.DATABASE_HOST,
   port: process.env.DATABASE_PORT,
   operatorsAliases: false,
+  logging: process.env.NODE_ENV !== 'test',
   pool: {
     max: 5,
     min: 0,

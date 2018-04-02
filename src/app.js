@@ -14,7 +14,7 @@ const server = http.createServer(app.callback())
 
 exports.server = server
 
-exports.runDep = function runDep () {
+exports.runDependency = function runDependency () {
   return Promise.all([
     db.client.sync().catch(err => {
       if (err) {

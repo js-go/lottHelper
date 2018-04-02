@@ -1,8 +1,5 @@
 {
   "verbose": false,
   "ignore": ["*.test.js"],
-  "restartable": "rs",
-  "env": {
-    "NODE_ENV": "development"
-  }
+  "restartable": "rs"
 }

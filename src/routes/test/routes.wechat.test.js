@@ -1,17 +1,21 @@
 const chai = require('chai')
-const request = require('supertest')
 const expect = chai.expect
 const should = chai.should()
 
-const app = require('../../app')
+const request = require('supertest')
+const { runDependency, server } = require('../../app')
 
-const req = request(app)
+const req = request(server)
 
-describe('💀 routes: api', () => {
-  describe('GET /api/v1', () => {
+describe('💀 routes: wechat', () => {
+  describe('GET /api/wechat', () => {
+    before(done => {
+      runDependency().then(() => done())
+    })
+
     it('should return hello wolrd', () => {
       req
-        .get('/api/v1')
+        .get('/api/wechat')
         .expect(200)
         .end((err, res) => {
           should.not.exist(err)
