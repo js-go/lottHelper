@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require('fs')
 require('dotenv').config()
-console.log(process.env.DATABASE_USERNAME)
+
 module.exports = {
   development: {
     username: process.env.DATABASE_USERNAME,
