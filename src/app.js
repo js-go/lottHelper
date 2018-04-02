@@ -4,13 +4,11 @@ const bodyParser = require('koa-bodyparser')
 const db = require('./db')
 
 const wechatRouter = require('./routes/wechat')
-const apiRouter = require('./routes/api')
 
 const app = new Koa()
 
 app.use(bodyParser())
 app.use(wechatRouter.routes())
-app.use(apiRouter.routes())
 
 const server = http.createServer(app.callback())
 
