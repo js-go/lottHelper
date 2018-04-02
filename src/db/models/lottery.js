@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize')
+
 module.exports = function (sequelize, DataTypes) {
   var Lottery = sequelize.define('Lottery', {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },

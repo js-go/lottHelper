@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize')
+
 module.exports = function (sequelize, DataTypes) {
   var Type = sequelize.define('Type', {
     id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement:true },
