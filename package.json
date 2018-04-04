@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node ./bin/index.js",
     "dev": "./node_modules/.bin/nodemon ./bin/index.js",
-    "test":
-      "NODE_ENV=test ./node_modules/.bin/mocha -r ./test/env.js ./src/**/**.test.js"
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha -r ./test/env.js ./src/**/**.test.js"
   },
   "author": "js:go",
   "license": "MIT",
@@ -16,6 +15,7 @@
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
+    "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
     "mysql2": "^1.5.3",

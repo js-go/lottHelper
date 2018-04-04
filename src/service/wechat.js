@@ -1,5 +1,6 @@
 const crypto = require('crypto')
 const request = require('request-promise')
+const Lottery = require('../db').Lottery
 
 async function getSessionKey (code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
@@ -41,6 +42,20 @@ function decryptData (sessionKey, encryptedData, iv) {
   }
 
   return decoded
+}
+
+function addNumbers() {
+  /*
+    periods
+    is_signle
+    numbers
+    name
+    user_id
+    species
+  */
+  Lottery.create({
+
+  })
 }
 
 module.exports = {

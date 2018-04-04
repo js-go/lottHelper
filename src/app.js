@@ -2,13 +2,16 @@ const http = require('http')
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const db = require('./db')
+const logger = require('koa-logger')
 
 const wechatRouter = require('./routes/wechat')
 
 const app = new Koa()
 
 app.use(bodyParser())
+app.use(logger())
 app.use(wechatRouter.routes())
+app.use(wechatRouter.allowedMethods())
 
 const server = http.createServer(app.callback())
 

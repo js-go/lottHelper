@@ -61,5 +61,17 @@ module.exports = {
     // 6. 拿到user_id，把user_id用jwt签名后，将token返回给小程序
     // 7. 每次访问api接口，验证token有效期
     // 8. token的更新: 小程序调用wx.checkSession()，如果失效重新调用wx.login()
+  },
+  addNumbers: async function(ctx, next) {
+    /*
+    periods
+    is_signle
+    numbers
+    name
+    user_id
+    species
+    */
+    const { type, species, numbers } = ctx.request.body
+    return ctx.body = 'hi'
   }
 }

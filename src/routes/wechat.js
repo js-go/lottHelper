@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const Api = require('../controller/api')
+const userRequire = require('../middleware').userRequire()
 
 const wechatRouter = new Router({
   prefix: '/api/wechat'
@@ -7,5 +8,6 @@ const wechatRouter = new Router({
 
 wechatRouter.get('/', Api.helloWorld)
 wechatRouter.post('/loginByWechat', Api.loginByWechat)
+wechatRouter.post('/add', userRequire, Api.addNumbers)
 
 module.exports = wechatRouter
