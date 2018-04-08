@@ -7,10 +7,12 @@ const { runDependency, server } = require('../../app')
 
 const req = request(server)
 
-describe('💀 routes: wechat', () => {
+describe('💀 controller: wechat', () => {
   describe('GET /api/wechat', () => {
     before(done => {
-      runDependency().then(() => done()).catch(done)
+      runDependency()
+        .then(() => done())
+        .catch(done)
     })
 
     it('should return hello wolrd', () => {
@@ -22,11 +24,9 @@ describe('💀 routes: wechat', () => {
           expect(res.body.message).to.eq('hello world')
         })
     })
-
   })
 
   describe('POST /api/wechat/add', () => {
-    
     it('should return add success info', () => {
       const addObject = {
         periods: '1109',
@@ -46,6 +46,5 @@ describe('💀 routes: wechat', () => {
           expect(res.body.message).to.eq('success')
         })
     })
-
   })
 })

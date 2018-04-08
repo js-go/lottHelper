@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./bin/index.js",
     "dev": "./node_modules/.bin/nodemon ./bin/index.js",
-    "test":"NODE_ENV=test ./node_modules/.bin/mocha -c -r ./test/env.js ./src/**/**.test.js --exit",
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha -c -r ./test/env.js ./src/**/**.test.js --exit",
+    "test:watch": "NODE_ENV=test ./node_modules/.bin/mocha -c -w -r ./test/env.js ./src/**/**.test.js",
     "migrate": "./node_modules/.bin/sequelize db:migrate",
     "seed": "./node_modules/.bin/sequelize db:seed:all"
   },
@@ -27,7 +28,8 @@
     "request": "^2.85.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.37.5",
-    "sequelize-cli": "^4.0.0"
+    "sequelize-cli": "^4.0.0",
+    "winston": "^3.0.0-rc4"
   },
   "devDependencies": {
     "chai": "^4.1.2",

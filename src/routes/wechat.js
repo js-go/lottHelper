@@ -1,5 +1,5 @@
 const Router = require('koa-router')
-const Api = require('../controller/api')
+const Api = require('../controller/wechat')
 const userRequire = require('../middleware').userRequire()
 
 const wechatRouter = new Router({

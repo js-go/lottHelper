@@ -1,8 +1,7 @@
 const crypto = require('crypto')
 const request = require('request-promise')
 const Lottery = require('../db').Lottery
-const User = require('../db').User
-const Sequelize = require('sequelize')
+const UserModel = require('../db').User
 
 async function getSessionKey(code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
@@ -48,8 +47,7 @@ function decryptData(sessionKey, encryptedData, iv) {
 
 function addNumbers(params) {
   return new Promise((resolve, reject) => {
-    Lottery
-      .create(params)
+    Lottery.create(params)
       .then(() => {
         resolve()
       })
@@ -62,12 +60,13 @@ function addNumbers(params) {
 
 function listNumbers(params) {
   return new Promise((resolve, reject) => {
-    let _count, pages;
+    let _count, pages
     Lottery.count({
-        where: {
-          user_id: params.user_id
-        }
-      }).then((count) => {
+      where: {
+        user_id: params.user_id
+      }
+    })
+      .then(count => {
         pages = Math.ceil(count / params.limit)
         _count = count
         let page = params.page // page number
@@ -79,24 +78,70 @@ function listNumbers(params) {
           limit: params.limit,
           offset: offset
         })
-        return result;
+        return result
       })
-      .then((result) => {
+      .then(result => {
         resolve({
           list: result,
           count: _count,
           pages: pages
         })
       })
-      .catch((error) => {
+      .catch(error => {
         reject(error)
       })
   })
 }
 
+/**
+ * 通过openid查找用户信息
+ *
+ * @param string openid
+ * @returns Promise<UserModel>
+ */
+function findUser(openid) {
+  return UserModel.findOne({
+    where: {
+      openid: openid
+    }
+  })
+}
+
+/**
+ * 创建新用户
+ *
+ * @param object userInfo
+ * @returns Promise<UserModel>
+ */
+function createUser(userInfo) {
+  return UserModel.create({
+    openid: userInfo.openId,
+    name: userInfo.nickName,
+    gender: userInfo.gender,
+    city: userInfo.city,
+    province: userInfo.province,
+    avatar_url: userInfo.avatarUrl
+    // address: userInfo.address
+    // phone: userInfo.phone // no phone
+    // unionId: userinfo.unionId
+  })
+}
+
+/**
+ * 更新用户信息
+ *
+ * @param string openid
+ * @param object userInfo
+ * @returns Promise<UserModel>
+ */
+function updateUserInfo(openid, userInfo) {}
+
 module.exports = {
   decryptData,
   getSessionKey,
   addNumbers,
-  listNumbers
+  listNumbers,
+  findUser,
+  createUser,
+  updateUserInfo
 }

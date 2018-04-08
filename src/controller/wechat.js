@@ -1,5 +1,6 @@
 const wechatService = require('../service/wechat')
 const JWT = require('jsonwebtoken')
+const logger = require('../log')
 
 module.exports = {
   helloWorld: function(ctx, next) {
@@ -10,30 +11,54 @@ module.exports = {
   loginByWechat: function(ctx, next) {
     const { code, iv, encryptedData } = ctx.request.body
 
+    // TODO: 使用 joi 验证 request body
     wechatService
       .getSessionKey(code)
       .then(({ openid, session_key, expires_in }) => {
-        const userInfo = wechatService.decryptData(session_key, encryptedData, iv)
+        const userInfo = wechatService.decryptData(
+          session_key,
+          encryptedData,
+          iv
+        )
 
-        // return db
-        // .findUser(userInfo.openid)
-        // .then(user => {
-        //   if (!user) {
-        //     return db.updateUser(userInfo)
-        //   }
-        //   return db.newUser(userInfo)
-        // })
-        // .then(user => {
-        //   const signPayload = {
-        //     uid: user.id,
-        //     openid: user.openid,
-        //     issuer: 'lottHelper'
-        //   }
+        if (openid !== userInfo.openId) {
+          logger.info(
+            'openid unequal, id-1: %s, id-2: %s',
+            openid,
+            userInfo.openId
+          )
 
-        //   return JWT.sign(signPayload, process.env.jwt_secret, {
-        //     expiresIn: '7d'
-        //   })
-        // })
+          throw new Error('openid unequal')
+        }
+
+        return wechatService
+          .findUser(openid)
+          .then(user => {
+            if (!user) {
+              logger.info('new user create openid %s', openid)
+
+              return wechatService.createUser(userInfo).catch(err => {
+                logger.error(err)
+                throw new Error('创建用户失败')
+              })
+            }
+
+            return wechatService.updateUserInfo(openid, userInfo).catch(err => {
+              logger.error(err)
+              throw new Error('更新用户信息失败')
+            })
+          })
+          .then(user => {
+            const signPayload = {
+              uid: user.id,
+              openid: user.openid,
+              issuer: 'lottHelper'
+            }
+
+            return JWT.sign(signPayload, process.env.jwt_secret, {
+              expiresIn: '7d'
+            })
+          })
       })
       .then(signToken => {
         ctx.body = {
@@ -42,7 +67,8 @@ module.exports = {
         }
       })
       .catch(err => {
-        console.error(err)
+        logger.error('wechat login fail', err)
+
         ctx.status = 500
         ctx.body = {
           message: ''
@@ -50,7 +76,14 @@ module.exports = {
       })
   },
   addNumbers: function(ctx, next) {
-    const { periods, is_signle, species, numbers, name, user_id } = ctx.request.body
+    const {
+      periods,
+      is_signle,
+      species,
+      numbers,
+      name,
+      user_id
+    } = ctx.request.body
 
     const addObject = {
       periods: periods,
