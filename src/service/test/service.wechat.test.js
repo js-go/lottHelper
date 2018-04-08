@@ -61,7 +61,7 @@ describe('添加彩票号码', function() {
         user_id: '1',
         species: '1'
       }
-      return wechatService.addNumbers(addObject).then( result => {
+      return wechatService.addNumbers(addObject).then( (result) => {
         expect(result.code).to.equal(200);
       })
     });
