@@ -1,7 +1,3 @@
-import {
-  reject
-} from 'any-promise';
-
 const crypto = require('crypto')
 const request = require('request-promise')
 const Lottery = require('../db').Lottery
