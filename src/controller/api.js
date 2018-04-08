@@ -2,30 +2,18 @@ const wechatService = require('../service/wechat')
 const JWT = require('jsonwebtoken')
 
 module.exports = {
-  helloWorld: function (ctx, next) {
+  helloWorld: function(ctx, next) {
     ctx.body = {
       message: 'hello world'
     }
   },
-  loginByWechat: function (ctx, next) {
-    const {
-      code,
-      iv,
-      encryptedData
-    } = ctx.request.body
+  loginByWechat: function(ctx, next) {
+    const { code, iv, encryptedData } = ctx.request.body
 
     wechatService
       .getSessionKey(code)
-      .then(({
-        openid,
-        session_key,
-        expires_in
-      }) => {
-        const userInfo = wechatService.decryptData(
-          session_key,
-          encryptedData,
-          iv
-        )
+      .then(({ openid, session_key, expires_in }) => {
+        const userInfo = wechatService.decryptData(session_key, encryptedData, iv)
 
         // return db
         // .findUser(userInfo.openid)
@@ -61,15 +49,8 @@ module.exports = {
         }
       })
   },
-  addNumbers: function (ctx, next) {
-    const {
-      periods,
-      is_signle,
-      species,
-      numbers,
-      name,
-      user_id
-    } = ctx.request.body
+  addNumbers: function(ctx, next) {
+    const { periods, is_signle, species, numbers, name, user_id } = ctx.request.body
 
     const addObject = {
       periods: periods,
@@ -80,29 +61,32 @@ module.exports = {
       species: species
     }
 
-    return wechatService.addNumbers(addObject).then((result) => {
+    return wechatService
+      .addNumbers(addObject)
+      .then(result => {
         ctx.body = {
           code: 200,
           message: 'success'
         }
       })
-      .catch((err) => {
+      .catch(err => {
         ctx.body = {
           code: 500,
           message: err
         }
       })
-
   },
-  listNumbers: function (ctx, next) {
-    let limit = 5; // number of records per page
-    let offset = 0;
-    return wechatService.listNumbers({
+  listNumbers: function(ctx, next) {
+    let limit = 5 // number of records per page
+    let offset = 0
+    return wechatService
+      .listNumbers({
         page: ctx.params.page || 1,
         user_id: 1,
         limit,
         offset
-      }).then((result) => {
+      })
+      .then(result => {
         ctx.body = {
           code: 200,
           message: 'success',
@@ -111,7 +95,7 @@ module.exports = {
           pages: result.pages
         }
       })
-      .catch((err) => {
+      .catch(err => {
         ctx.body = {
           code: 500,
           message: err
