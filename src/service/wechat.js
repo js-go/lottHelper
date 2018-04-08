@@ -46,10 +46,10 @@ function decryptData(sessionKey, encryptedData, iv) {
   return decoded
 }
 
-function addNumbers(addObject) {
+function addNumbers(params) {
   return new Promise((resolve, reject) => {
     Lottery
-      .create(addObject)
+      .create(params)
       .then(() => {
         resolve()
       })
