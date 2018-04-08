@@ -1,10 +1,13 @@
 {
   "env": {
+    "node": true,
+    "es6": true,
     "mocha": true
   },
-  "plugins": ["security"],
-  "extends": ["standard", "plugin:security/recommended"],
+  "plugins": ["security", "prettier"],
+  "extends": ["standard", "plugin:node/recommended", "plugin:security/recommended", "prettier", "prettier/standard"],
   "rules": {
+    "prettier/prettier": "error",
     "camelcase": "off"
   }
 }
