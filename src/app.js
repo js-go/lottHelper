@@ -21,7 +21,9 @@ exports.server = server
 
 exports.runDependency = function runDependency () {
   return Promise.all([
-    db.client.sync().catch(err => {
+    db.client.sync({
+      force: !true
+    }).catch(err => {
       if (err) {
         let error = new Error('数据库连接失败')
         error.stack = err.stack
