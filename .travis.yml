@@ -11,3 +11,5 @@ services:
 
 before_install:
      - mysql -e 'CREATE DATABASE lott_helper;'
+
+script: npm test
