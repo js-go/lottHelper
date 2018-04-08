@@ -25,7 +25,7 @@ describe('💀 routes: wechat', () => {
 
   })
 
-  describe('GET /api/wechat/add', () => {
+  describe('POST /api/wechat/add', () => {
     
     it('should return add success info', () => {
       const addObject = {
