@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
     user_id: { type: Sequelize.STRING, allowNull: false },
     species: { type: Sequelize.STRING, allowNull: false }, //1：福彩  2：体彩,
     winning: { type: Sequelize.STRING }, // 1为一等奖 ....空为不中奖
-    check: { type: Sequelize.BOOLEAN,  defaultValue: false }
+    check: { type: Sequelize.BOOLEAN,  defaultValue: false } // 校验用户上传的中奖结果
   })
 
   return Lottery
