@@ -1,8 +1,12 @@
+import {
+  reject
+} from 'any-promise';
+
 const crypto = require('crypto')
 const request = require('request-promise')
 const Lottery = require('../db').Lottery
 
-async function getSessionKey (code) {
+async function getSessionKey(code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
     process.env.wx_appid
   }&secret=${
@@ -18,7 +22,7 @@ async function getSessionKey (code) {
   return JSON.parse(data)
 }
 
-function decryptData (sessionKey, encryptedData, iv) {
+function decryptData(sessionKey, encryptedData, iv) {
   // base64 decode
   const sessionKeyData = Buffer.from(sessionKey, 'base64')
   encryptedData = Buffer.from(encryptedData, 'base64')
@@ -44,21 +48,22 @@ function decryptData (sessionKey, encryptedData, iv) {
   return decoded
 }
 
-function addNumbers() {
-  /*
-    periods
-    is_signle
-    numbers
-    name
-    user_id
-    species
-  */
-  Lottery.create({
-
+function addNumbers(addObject) {
+  return new Promise((resolve, reject) => {
+    Lottery
+      .create(addObject)
+      .then(respone => {
+        resolve(respone)
+      })
+      .catch(error => {
+        // Ooops, do some error-handling
+        reject(respone)
+      })
   })
 }
 
 module.exports = {
   decryptData,
-  getSessionKey
+  getSessionKey,
+  addNumbers
 }

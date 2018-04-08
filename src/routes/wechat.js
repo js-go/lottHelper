@@ -8,6 +8,6 @@ const wechatRouter = new Router({
 
 wechatRouter.get('/', Api.helloWorld)
 wechatRouter.post('/loginByWechat', Api.loginByWechat)
-wechatRouter.post('/add', userRequire, Api.addNumbers)
+wechatRouter.post('/add', Api.addNumbers)
 
 module.exports = wechatRouter

@@ -49,3 +49,23 @@ describe('😈 service: wechat', () => {
     expect(decode).to.eql(decodeData)
   })
 })
+
+describe('添加彩票号码', function() {
+  describe('#add()', function() {
+    it('should add without error', function(done) {
+      const addObject = {
+        periods: '1109',
+        is_signle: '1',
+        numbers: '01-02-03-04-05,12-13',
+        name: '双色球',
+        user_id: '1',
+        species: '1'
+      }
+      return wechatService.addNumbers(addObject).then( res => {
+        expect(res.code).to.equal(200);
+      })
+    });
+  });
+
+
+});
