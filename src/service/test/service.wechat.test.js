@@ -52,7 +52,7 @@ describe('😈 service: wechat', () => {
 
 describe('添加彩票号码', function() {
   describe('#add()', function() {
-    it('should add without error', function(done) {
+    it('should add without error', () => {
       const addObject = {
         periods: '1109',
         is_signle: '1',
@@ -61,8 +61,8 @@ describe('添加彩票号码', function() {
         user_id: '1',
         species: '1'
       }
-      return wechatService.addNumbers(addObject).then( res => {
-        expect(res.code).to.equal(200);
+      return wechatService.addNumbers(addObject).then( result => {
+        expect(result.code).to.equal(200);
       })
     });
   });
