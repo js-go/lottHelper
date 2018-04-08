@@ -57,7 +57,7 @@ function addNumbers(addObject) {
       })
       .catch(error => {
         // Ooops, do some error-handling
-        reject(respone)
+        reject(error)
       })
   })
 }
