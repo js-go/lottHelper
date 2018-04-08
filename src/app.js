@@ -19,7 +19,7 @@ const server = http.createServer(app.callback())
 
 exports.server = server
 
-exports.runDependency = function runDependency () {
+exports.runDependency = function runDependency() {
   return Promise.all([
     db.client.sync({
       force: !true
