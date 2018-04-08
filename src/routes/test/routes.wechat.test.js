@@ -10,7 +10,7 @@ const req = request(server)
 describe('💀 routes: wechat', () => {
   describe('GET /api/wechat', () => {
     before(done => {
-      runDependency().then(() => done())
+      runDependency().then(() => done()).catch(done)
     })
 
     it('should return hello wolrd', () => {
