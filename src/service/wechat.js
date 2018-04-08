@@ -48,8 +48,8 @@ function addNumbers(addObject) {
   return new Promise((resolve, reject) => {
     Lottery
       .create(addObject)
-      .then(respone => {
-        resolve(respone)
+      .then(() => {
+        resolve()
       })
       .catch(error => {
         // Ooops, do some error-handling

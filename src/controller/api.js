@@ -54,25 +54,26 @@ module.exports = {
       })
   },
   addNumbers: async function(ctx, next) {
-    const { type, species, numbers } = ctx.request.body
+    const { periods, is_signle, species, numbers, name, user_id } = ctx.request.body
     const addObject = {
-      periods: '',
-      is_signle: '',
-      numbers: '',
-      name: '',
-      user_id: '1',
+      periods: periods,
+      is_signle: is_signle,
+      numbers: numbers,
+      name: name,
+      user_id: user_id,
       species: species
     }
-    wechatService.addNumbers(addObject).then( (res) => {
+
+    return wechatService.addNumbers(addObject).then( (result) => {
       ctx.body = {
         code: 200,
-        message: 'ok'
+        message: 'success'
       }
     })
-    .catch(()=>{
+    .catch((err)=>{
       ctx.body = {
         code: 500,
-        message: 'error'
+        message: err
       }
     })
     

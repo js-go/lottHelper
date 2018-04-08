@@ -9,7 +9,9 @@ const wechatRouter = require('./routes/wechat')
 const app = new Koa()
 
 app.use(bodyParser())
-app.use(logger())
+if (process.env.NODE_ENV == 'dev') {
+  app.use(logger())
+}
 app.use(wechatRouter.routes())
 app.use(wechatRouter.allowedMethods())
 
