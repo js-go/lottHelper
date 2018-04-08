@@ -1,6 +1,8 @@
 const crypto = require('crypto')
 const request = require('request-promise')
 const Lottery = require('../db').Lottery
+const User = require('../db').User
+const Sequelize = require('sequelize')
 
 async function getSessionKey(code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
@@ -58,8 +60,43 @@ function addNumbers(addObject) {
   })
 }
 
+function listNumbers(params) {
+  return new Promise((resolve, reject) => {
+    let _count, pages;
+    Lottery.count({
+        where: {
+          user_id: params.user_id
+        }
+      }).then((count) => {
+        pages = Math.ceil(count / params.limit)
+        _count = count
+        let page = params.page // page number
+        let offset = params.limit * (page - 1)
+        let result = Lottery.findAll({
+          where: {
+            user_id: params.user_id
+          },
+          limit: params.limit,
+          offset: offset
+        })
+        return result;
+      })
+      .then((result) => {
+        resolve({
+          list: result,
+          count: _count,
+          pages: pages
+        })
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
 module.exports = {
   decryptData,
   getSessionKey,
-  addNumbers
+  addNumbers,
+  listNumbers
 }

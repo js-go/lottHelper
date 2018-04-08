@@ -2,17 +2,25 @@ const wechatService = require('../service/wechat')
 const JWT = require('jsonwebtoken')
 
 module.exports = {
-  helloWorld: async function (ctx, next) {
+  helloWorld: function (ctx, next) {
     ctx.body = {
       message: 'hello world'
     }
   },
-  loginByWechat: async function (ctx, next) {
-    const { code, iv, encryptedData } = ctx.request.body
+  loginByWechat: function (ctx, next) {
+    const {
+      code,
+      iv,
+      encryptedData
+    } = ctx.request.body
 
     wechatService
       .getSessionKey(code)
-      .then(({ openid, session_key, expires_in }) => {
+      .then(({
+        openid,
+        session_key,
+        expires_in
+      }) => {
         const userInfo = wechatService.decryptData(
           session_key,
           encryptedData,
@@ -53,8 +61,16 @@ module.exports = {
         }
       })
   },
-  addNumbers: async function(ctx, next) {
-    const { periods, is_signle, species, numbers, name, user_id } = ctx.request.body
+  addNumbers: function (ctx, next) {
+    const {
+      periods,
+      is_signle,
+      species,
+      numbers,
+      name,
+      user_id
+    } = ctx.request.body
+
     const addObject = {
       periods: periods,
       is_signle: is_signle,
@@ -64,18 +80,42 @@ module.exports = {
       species: species
     }
 
-    return wechatService.addNumbers(addObject).then( (result) => {
-      ctx.body = {
-        code: 200,
-        message: 'success'
-      }
-    })
-    .catch((err)=>{
-      ctx.body = {
-        code: 500,
-        message: err
-      }
-    })
-    
+    return wechatService.addNumbers(addObject).then((result) => {
+        ctx.body = {
+          code: 200,
+          message: 'success'
+        }
+      })
+      .catch((err) => {
+        ctx.body = {
+          code: 500,
+          message: err
+        }
+      })
+
+  },
+  listNumbers: function (ctx, next) {
+    let limit = 5; // number of records per page
+    let offset = 0;
+    return wechatService.listNumbers({
+        page: ctx.params.page || 1,
+        user_id: 1,
+        limit,
+        offset
+      }).then((result) => {
+        ctx.body = {
+          code: 200,
+          message: 'success',
+          list: result.list,
+          count: result.count,
+          pages: result.pages
+        }
+      })
+      .catch((err) => {
+        ctx.body = {
+          code: 500,
+          message: err
+        }
+      })
   }
 }
