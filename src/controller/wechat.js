@@ -1,6 +1,13 @@
-const wechatService = require('../service/wechat')
 const JWT = require('jsonwebtoken')
+const Joi = require('joi')
+const wechatService = require('../service/wechat')
 const logger = require('../log')
+
+const loginSchema = Joi.object().keys({
+  code: Joi.string().required(),
+  iv: Joi.string().required(),
+  encryptedData: Joi.string().required()
+})
 
 module.exports = {
   helloWorld: function(ctx, next) {
@@ -9,10 +16,21 @@ module.exports = {
     }
   },
   loginByWechat: function(ctx, next) {
-    const { code, iv, encryptedData } = ctx.request.body
+    const valid = Joi.validate(ctx.request.body, loginSchema)
 
-    // TODO: 使用 joi 验证 request body
-    wechatService
+    if (valid.error) {
+      ctx.status = 400
+      ctx.body = {
+        message: 'request body error',
+        status: 'fail'
+      }
+
+      return
+    }
+
+    const { code, iv, encryptedData } = valid.value
+
+    return wechatService
       .getSessionKey(code)
       .then(({ openid, session_key, expires_in }) => {
         const userInfo = wechatService.decryptData(
@@ -63,15 +81,16 @@ module.exports = {
       .then(signToken => {
         ctx.body = {
           message: 'ok',
-          data: signToken
+          result: signToken
         }
       })
       .catch(err => {
-        logger.error('wechat login fail', err)
+        logger.error('wechat login fail: %o', err.message)
 
         ctx.status = 500
         ctx.body = {
-          message: ''
+          message: 'server error',
+          status: 'fail'
         }
       })
   },

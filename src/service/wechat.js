@@ -4,23 +4,29 @@ const Op = require('sequelize').Op
 const Lottery = require('../db').Lottery
 const UserModel = require('../db').User
 
-async function getSessionKey(code) {
+function getSessionKey(code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
     process.env.wx_appid
   }&secret=${
     process.env.wx_appsecret
   }&js_code=${code}&grant_type=authorization_code`
 
-  let data = await request(reqUrl)
+  return request(reqUrl).then(data => {
+    if (!data) {
+      throw new Error('empty response')
+    }
 
-  if (!data) {
-    throw new Error('empty response')
-  }
+    data = JSON.parse(data)
 
-  return JSON.parse(data)
+    if (data.errcode) {
+      throw new Error(data.errmsg)
+    }
+
+    return data
+  })
 }
 
-function decryptData(sessionKey, encryptedData, iv) {
+function decryptData(sessionKey, encryptedData, iv, wx_appid) {
   // base64 decode
   const sessionKeyData = Buffer.from(sessionKey, 'base64')
   encryptedData = Buffer.from(encryptedData, 'base64')
@@ -39,7 +45,7 @@ function decryptData(sessionKey, encryptedData, iv) {
     throw new Error('Illegal Buffer')
   }
 
-  if (decoded.watermark.appid !== process.env.wx_appid) {
+  if (decoded.watermark.appid !== (wx_appid || process.env.wx_appid)) {
     throw new Error('Illegal Buffer')
   }
 

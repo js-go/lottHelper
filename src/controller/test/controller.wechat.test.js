@@ -47,4 +47,46 @@ describe('💀 controller: wechat', () => {
         })
     })
   })
+
+  describe('POST /api/wechat/loginByWechat', () => {
+    it('login post empty schema', done => {
+      const loginData = {
+        iv: '',
+        code: '',
+        encryptedData: ''
+      }
+
+      req
+        .post('/api/wechat/loginByWechat')
+        .send(loginData)
+        .expect(400)
+        .end((err, res) => {
+          should.not.exist(err)
+
+          expect(res.body.message).to.eq('request body error')
+          expect(res.body.status).to.eq('fail')
+          done()
+        })
+    })
+
+    it('login post error schema', done => {
+      const loginData = {
+        iv: '1',
+        code: '1',
+        encryptedData: '1'
+      }
+
+      req
+        .post('/api/wechat/loginByWechat')
+        .send(loginData)
+        .expect(500)
+        .end((err, res) => {
+          should.not.exist(err)
+
+          expect(res.body.message).to.eq('server error')
+          expect(res.body.status).to.eq('fail')
+          done()
+        })
+    })
+  })
 })

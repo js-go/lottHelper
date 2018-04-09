@@ -28,8 +28,6 @@ var iv = 'r7BXXKkLb8qrSNn05n0qiA=='
 
 describe('😈 service: wechat', () => {
   before(done => {
-    process.env.wx_appid = appId
-
     runDependency()
       .then(() => done())
       .catch(done)
@@ -50,7 +48,12 @@ describe('😈 service: wechat', () => {
       watermark: { timestamp: 1477314187, appid: 'wx4f4bc4dec97d474b' }
     }
 
-    const decode = wechatService.decryptData(sessionKey, encryptedData, iv)
+    const decode = wechatService.decryptData(
+      sessionKey,
+      encryptedData,
+      iv,
+      appId
+    )
 
     expect(decode).to.eql(decodeData)
   })

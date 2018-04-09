@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "dotenv": "^5.0.1",
+    "joi": "^13.1.2",
     "jsonwebtoken": "^8.2.0",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
