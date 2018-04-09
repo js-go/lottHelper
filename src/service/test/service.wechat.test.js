@@ -27,10 +27,8 @@ var encryptedData =
 var iv = 'r7BXXKkLb8qrSNn05n0qiA=='
 
 describe('😈 service: wechat', () => {
-  before(done => {
-    runDependency()
-      .then(() => done())
-      .catch(done)
+  before(() => {
+    return runDependency()
   })
 
   it('解密微信数据 decryptData', () => {
@@ -68,32 +66,24 @@ describe('😈 service: wechat', () => {
       avatar_url: ''
     }
 
-    after(done => {
-      wechatService
-        .removeUser(user.openId)
-        .then(() => done())
-        .catch(done)
+    after(() => {
+      return wechatService.removeUser(user.openId)
     })
 
-    it('create new user', done => {
-      wechatService
-        .createUser(user)
-        .then(res => {
-          should.exist(res)
-          expect(res.openid).to.eq(user.openId)
-
-          done()
-        })
-        .catch(done)
+    it('create new user', () => {
+      return wechatService.createUser(user).then(res => {
+        should.exist(res)
+        expect(res.openid).to.eq(user.openId)
+      })
     })
 
-    it('remove new user', done => {
+    it('remove new user', () => {
       const _user = {
         ...user,
         openId: Math.random().toString()
       }
 
-      wechatService
+      return wechatService
         .createUser(_user)
         .then(res => {
           should.exist(res)
@@ -103,26 +93,19 @@ describe('😈 service: wechat', () => {
         })
         .then(res => {
           expect(res).to.eq(1)
-
-          done()
         })
-        .catch(done)
     })
 
-    it('update user', done => {
+    it('update user', () => {
       const updateUser = {
         ...user,
         name: 'update username'
       }
-      wechatService
-        .updateUserInfo(user.openId, updateUser)
-        .then(res => {
-          should.exist(res)
-          expect(res[0]).to.gte(0)
 
-          done()
-        })
-        .catch(done)
+      return wechatService.updateUserInfo(user.openId, updateUser).then(res => {
+        should.exist(res)
+        expect(res[0]).to.gte(0)
+      })
     })
   })
 })

@@ -9,10 +9,8 @@ const req = request(server)
 
 describe('💀 controller: wechat', () => {
   describe('GET /api/wechat', () => {
-    before(done => {
-      runDependency()
-        .then(() => done())
-        .catch(done)
+    before(() => {
+      return runDependency()
     })
 
     it('should return hello wolrd', () => {
