@@ -1,5 +1,6 @@
 const crypto = require('crypto')
 const request = require('request-promise')
+const Op = require('sequelize').Op
 const Lottery = require('../db').Lottery
 const UserModel = require('../db').User
 
@@ -96,11 +97,25 @@ function listNumbers(params) {
 /**
  * 通过openid查找用户信息
  *
- * @param string openid
- * @returns Promise<UserModel>
+ * @param {string} openid
+ * @returns {Promise<UserModel>}
  */
 function findUser(openid) {
   return UserModel.findOne({
+    where: {
+      openid: openid
+    },
+    attributes: { exclude: ['id'] }
+  })
+}
+
+/**
+ * 通过openid删除用户
+ *
+ * @param {string} openid
+ */
+function removeUser(openid) {
+  return UserModel.destroy({
     where: {
       openid: openid
     }
@@ -110,8 +125,8 @@ function findUser(openid) {
 /**
  * 创建新用户
  *
- * @param object userInfo
- * @returns Promise<UserModel>
+ * @param {object} userInfo
+ * @returns {Promise<UserModel>}
  */
 function createUser(userInfo) {
   return UserModel.create({
@@ -130,11 +145,19 @@ function createUser(userInfo) {
 /**
  * 更新用户信息
  *
- * @param string openid
- * @param object userInfo
- * @returns Promise<UserModel>
+ * @param {string} openid
+ * @param {object} userInfo
+ * @returns {Promise<UserModel>}
  */
-function updateUserInfo(openid, userInfo) {}
+function updateUserInfo(openid, userInfo) {
+  return UserModel.update(userInfo, {
+    where: {
+      openid: {
+        [Op.eq]: openid
+      }
+    }
+  })
+}
 
 module.exports = {
   decryptData,
@@ -143,5 +166,6 @@ module.exports = {
   listNumbers,
   findUser,
   createUser,
+  removeUser,
   updateUserInfo
 }

@@ -1,6 +1,8 @@
 const chai = require('chai')
 const expect = chai.expect
+const should = chai.should()
 const wechatService = require('../wechat')
+const { runDependency } = require('../../app')
 
 var appId = 'wx4f4bc4dec97d474b'
 var sessionKey = 'tiihtNczf5v6AKRyjwEUhQ=='
@@ -25,8 +27,12 @@ var encryptedData =
 var iv = 'r7BXXKkLb8qrSNn05n0qiA=='
 
 describe('😈 service: wechat', () => {
-  beforeEach(() => {
+  before(done => {
     process.env.wx_appid = appId
+
+    runDependency()
+      .then(() => done())
+      .catch(done)
   })
 
   it('解密微信数据 decryptData', () => {
@@ -47,5 +53,73 @@ describe('😈 service: wechat', () => {
     const decode = wechatService.decryptData(sessionKey, encryptedData, iv)
 
     expect(decode).to.eql(decodeData)
+  })
+
+  describe(' user method', function() {
+    const user = {
+      openId: 'test',
+      nickName: 'test name',
+      gender: 1,
+      city: 'test',
+      province: 'test',
+      avatar_url: ''
+    }
+
+    after(done => {
+      wechatService
+        .removeUser(user.openId)
+        .then(() => done())
+        .catch(done)
+    })
+
+    it('create new user', done => {
+      wechatService
+        .createUser(user)
+        .then(res => {
+          should.exist(res)
+          expect(res.openid).to.eq(user.openId)
+
+          done()
+        })
+        .catch(done)
+    })
+
+    it('remove new user', done => {
+      const _user = {
+        ...user,
+        openId: Math.random().toString()
+      }
+
+      wechatService
+        .createUser(_user)
+        .then(res => {
+          should.exist(res)
+          expect(res.openid).to.eq(_user.openId)
+
+          return wechatService.removeUser(res.openid)
+        })
+        .then(res => {
+          expect(res).to.eq(1)
+
+          done()
+        })
+        .catch(done)
+    })
+
+    it('update user', done => {
+      const updateUser = {
+        ...user,
+        name: 'update username'
+      }
+      wechatService
+        .updateUserInfo(user.openId, updateUser)
+        .then(res => {
+          should.exist(res)
+          expect(res[0]).to.gte(0)
+
+          done()
+        })
+        .catch(done)
+    })
   })
 })

@@ -5,7 +5,7 @@
     "mocha": true
   },
   "plugins": ["security", "prettier"],
-  "extends": ["standard", "plugin:node/recommended", "plugin:security/recommended", "prettier", "prettier/standard"],
+  "extends": ["standard", "plugin:security/recommended", "prettier", "prettier/standard"],
   "rules": {
     "prettier/prettier": "error",
     "camelcase": "off"
