@@ -89,4 +89,17 @@ describe('💀 controller: wechat', () => {
         })
     })
   })
+
+  describe('GET /api/wechat/uptoken', () => {
+    it('should return a uptoken', () => {
+      req
+        .get('/api/wechat/uptoken')
+        .expect(200)
+        .end((err, res) => {
+          should.not.exist(err)
+          expect(res.body.message).to.eq('success')
+          expect(res.body.uptoken).to.be.a('string')
+        })
+    })
+  })
 })

@@ -9,6 +9,7 @@ const wechatRouter = new Router({
 wechatRouter.get('/', Api.helloWorld)
 wechatRouter.get('/list', Api.listNumbers)
 wechatRouter.get('/list/:page', Api.listNumbers)
+wechatRouter.get('/uptoken', Api.uptoken)
 
 wechatRouter.post('/loginByWechat', Api.loginByWechat)
 wechatRouter.post('/add', Api.addNumbers)

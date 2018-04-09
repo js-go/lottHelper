@@ -48,14 +48,16 @@ describe('😈 service: wechat', () => {
       watermark: { timestamp: 1477314187, appid: 'wx4f4bc4dec97d474b' }
     }
 
-    const decode = wechatService.decryptData(
-      sessionKey,
-      encryptedData,
-      iv,
-      appId
-    )
+    const decode = wechatService.decryptData(sessionKey, encryptedData, iv, appId)
 
     expect(decode).to.eql(decodeData)
+  })
+
+  describe('generate a qiniu token for client', () => {
+    it('create a new token is not empty', () => {
+      const token = wechatService.uptoken()
+      expect(token).to.be.a('string')
+    })
   })
 
   describe(' user method', function() {
