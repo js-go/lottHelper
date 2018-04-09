@@ -33,10 +33,18 @@ module.exports = {
     return wechatService
       .getSessionKey(code)
       .then(({ openid, session_key, expires_in }) => {
-        const userInfo = wechatService.decryptData(session_key, encryptedData, iv)
+        const userInfo = wechatService.decryptData(
+          session_key,
+          encryptedData,
+          iv
+        )
 
         if (openid !== userInfo.openId) {
-          logger.info('openid unequal, id-1: %s, id-2: %s', openid, userInfo.openId)
+          logger.info(
+            'openid unequal, id-1: %s, id-2: %s',
+            openid,
+            userInfo.openId
+          )
 
           throw new Error('openid unequal')
         }
@@ -87,7 +95,14 @@ module.exports = {
       })
   },
   addNumbers: function(ctx, next) {
-    const { periods, is_signle, species, numbers, name, user_id } = ctx.request.body
+    const {
+      periods,
+      is_signle,
+      species,
+      numbers,
+      name,
+      user_id
+    } = ctx.request.body
 
     const addObject = {
       periods: periods,

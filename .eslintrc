@@ -7,6 +7,7 @@
   "plugins": ["security", "prettier"],
   "extends": ["standard", "plugin:security/recommended", "prettier", "prettier/standard"],
   "rules": {
+    "no-unused-expressions": "off",
     "prettier/prettier": "error",
     "camelcase": "off"
   }

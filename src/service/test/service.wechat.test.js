@@ -1,6 +1,4 @@
-const chai = require('chai')
-const expect = chai.expect
-const should = chai.should()
+const { expect } = require('chai')
 const wechatService = require('../wechat')
 const { runDependency } = require('../../app')
 
@@ -46,7 +44,12 @@ describe('😈 service: wechat', () => {
       watermark: { timestamp: 1477314187, appid: 'wx4f4bc4dec97d474b' }
     }
 
-    const decode = wechatService.decryptData(sessionKey, encryptedData, iv, appId)
+    const decode = wechatService.decryptData(
+      sessionKey,
+      encryptedData,
+      iv,
+      appId
+    )
 
     expect(decode).to.eql(decodeData)
   })
@@ -74,7 +77,7 @@ describe('😈 service: wechat', () => {
 
     it('create new user', () => {
       return wechatService.createUser(user).then(res => {
-        should.exist(res)
+        expect(res).to.be.a('object')
         expect(res.openid).to.eq(user.openId)
       })
     })
@@ -88,7 +91,7 @@ describe('😈 service: wechat', () => {
       return wechatService
         .createUser(_user)
         .then(res => {
-          should.exist(res)
+          expect(res).to.be.a('object')
           expect(res.openid).to.eq(_user.openId)
 
           return wechatService.removeUser(res.openid)
@@ -105,7 +108,6 @@ describe('😈 service: wechat', () => {
       }
 
       return wechatService.updateUserInfo(user.openId, updateUser).then(res => {
-        should.exist(res)
         expect(res[0]).to.gte(0)
       })
     })
