@@ -3,11 +3,10 @@ const request = require('request-promise')
 const Op = require('sequelize').Op
 const Lottery = require('../db').Lottery
 const UserModel = require('../db').User
+const qiniu = require('qiniu')
 
 function getSessionKey(code) {
-  const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
-    process.env.wx_appid
-  }&secret=${
+  const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${process.env.wx_appid}&secret=${
     process.env.wx_appsecret
   }&js_code=${code}&grant_type=authorization_code`
 
@@ -165,6 +164,18 @@ function updateUserInfo(openid, userInfo) {
   })
 }
 
+function uptoken() {
+  const options = {
+    scope: process.env.Bucket,
+    deleteAfterDays: 7,
+    returnBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+  }
+  const mac = new qiniu.auth.digest.Mac(process.env.AccessKey, process.env.SecretKey)
+  const putPolicy = new qiniu.rs.PutPolicy(options)
+  const token = putPolicy.uploadToken(mac)
+  return token
+}
+
 module.exports = {
   decryptData,
   getSessionKey,
@@ -173,5 +184,6 @@ module.exports = {
   findUser,
   createUser,
   removeUser,
-  updateUserInfo
+  updateUserInfo,
+  uptoken
 }

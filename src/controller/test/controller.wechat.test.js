@@ -1,9 +1,11 @@
 const chai = require('chai')
+const chaiHttp = require('chai-http')
 const expect = chai.expect
 const should = chai.should()
-
 const request = require('supertest')
 const { runDependency, server } = require('../../app')
+
+chai.use(chaiHttp)
 
 const req = request(server)
 
@@ -83,6 +85,23 @@ describe('💀 controller: wechat', () => {
 
           expect(res.body.message).to.eq('server error')
           expect(res.body.status).to.eq('fail')
+          done()
+        })
+    })
+  })
+
+  describe('GET /api/wechat/uptoken', () => {
+    it('should return a uptoken', done => {
+      chai
+        .request(server)
+        .get('/api/wechat/uptoken')
+        .end(function(err, res) {
+          expect(err).to.be.null
+          expect(res).to.have.status(200)
+          expect(res.body.message).to.eq('success')
+          expect(res.body.uptoken).to.be.a('string')
+          expect(res).to.have.header('Pragma', 'no-cache')
+          expect(res).to.have.header('Expires', 0)
           done()
         })
     })
