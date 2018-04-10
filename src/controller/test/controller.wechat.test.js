@@ -106,4 +106,48 @@ describe('💀 controller: wechat', () => {
         })
     })
   })
+
+  describe('User require', function() {
+    it('empty token should return 400', done => {
+      req
+        .get('/api/wechat/userRequire')
+        .expect(400)
+        .end(function(err, res) {
+          expect(err).to.be.null
+
+          done()
+        })
+    })
+
+    it('error token should return 400', done => {
+      req
+        .get('/api/wechat/userRequire')
+        .set('authorization', 'Bearer error token')
+        .expect(400)
+        .end(function(err, res) {
+          expect(err).to.be.null
+          expect(res.body.code).to.eq(400)
+          expect(res.body.message).to.eq('valid fail')
+
+          done()
+        })
+    })
+
+    it('expire token should return 400', done => {
+      req
+        .get('/api/wechat/userRequire')
+        .set(
+          'authorization',
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJsb3R0SGVscGVyIiwiaWF0IjoxNTIzMzI3NzE3LCJleHAiOjE1MjMzMjc3MjB9.JmN3zLGiV4Zemil3tXlkNg_d0qGwZnn4IO3tzPxQfmw'
+        )
+        .expect(400)
+        .end(function(err, res) {
+          expect(err).to.be.null
+          expect(res.body.code).to.eq(400)
+          expect(res.body.message).to.eq('token expire')
+
+          done()
+        })
+    })
+  })
 })
