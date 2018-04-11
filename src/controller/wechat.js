@@ -61,15 +61,17 @@ module.exports = {
               })
             }
 
-            return wechatService.updateUserInfo(openid, userInfo).catch(err => {
-              logger.error(err)
-              throw new Error('更新用户信息失败')
-            })
+            return wechatService
+              .updateUserInfo(openid, userInfo)
+              .then(() => userInfo)
+              .catch(err => {
+                logger.error(err)
+                throw new Error('更新用户信息失败')
+              })
           })
           .then(user => {
             const signPayload = {
-              uid: user.id,
-              openid: user.openid,
+              openid: user.openId,
               issuer: 'lottHelper'
             }
 
