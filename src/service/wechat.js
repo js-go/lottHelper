@@ -4,6 +4,7 @@ const Op = require('sequelize').Op
 const Lottery = require('../db').Lottery
 const UserModel = require('../db').User
 const qiniu = require('qiniu')
+const AipOcrClient = require("baidu-aip-sdk").ocr
 
 function getSessionKey(code) {
   const reqUrl = `https://api.weixin.qq.com/sns/jscode2session?appid=${
@@ -182,6 +183,15 @@ function uptoken() {
   return token
 }
 
+function ocr(url) {
+  const options = {}
+  options["language_type"] = "CHN_ENG"
+  options["detect_direction"] = "true"
+  // options["probability"] = "true"
+  const client = new AipOcrClient(process.env.BD_APP_ID, process.env.BD_API_KEY, process.env.BD_SECRET_KEY)
+  return client.generalBasicUrl(url, options)
+}
+
 module.exports = {
   decryptData,
   getSessionKey,
@@ -191,5 +201,6 @@ module.exports = {
   createUser,
   removeUser,
   updateUserInfo,
-  uptoken
+  uptoken,
+  ocr
 }

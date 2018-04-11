@@ -170,5 +170,20 @@ module.exports = {
       code: 500,
       message: 'failed'
     })
+  },
+  ocr: function (ctx) {
+    const { url } = ctx.request.body
+    return wechatService.ocr(url).then((result) => {
+      ctx.body = {
+        list: JSON.stringify(result.words_result)
+      }
+    })
+    .catch( e => {
+      ctx.body = {
+        code: 500,
+        message: 'failed'
+      }
+      console.log(e)
+    })
   }
 }

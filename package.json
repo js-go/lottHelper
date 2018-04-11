@@ -17,6 +17,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
+    "baidu-aip-sdk": "^2.1.0",
     "chai-http": "^4.0.0",
     "dotenv": "^5.0.1",
     "joi": "^13.1.2",
