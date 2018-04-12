@@ -161,6 +161,13 @@ module.exports = {
     let limit = 5 // number of records per page
     let offset = 0
     const user_id = ctx.state.user.openid
+    if (!user_id) {
+      ctx.status = 401
+      return ctx.body = {
+        code: 401,
+        message: 'User Unauthenticated'
+      }
+    }
     return wechatService
       .listNumbers({
         page: ctx.params.page || 1,
