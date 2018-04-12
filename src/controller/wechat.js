@@ -176,8 +176,15 @@ module.exports = {
   ocr: function (ctx) {
     const { url } = ctx.request.body
     return wechatService.ocr(url).then((result) => {
-      ctx.body = {
-        list: JSON.stringify(result.words_result)
+      const result = JSON.stringify(result.words_result)
+      if (/福彩|体育彩票/.test(result) {
+        return ctx.body = {
+          list: result
+        }
+      }
+      return ctx.body = {
+         code: 400,
+         message: '这不是彩票'
       }
     })
     .catch( e => {
