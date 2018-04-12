@@ -177,7 +177,7 @@ module.exports = {
     const { url } = ctx.request.body
     return wechatService.ocr(url).then((result) => {
       const result = JSON.stringify(result.words_result)
-      if (/福彩|体育彩票/.test(result) {
+      if (/福彩|体育彩?/.test(result)) {
         return ctx.body = {
           list: result
         }
