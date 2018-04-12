@@ -24,7 +24,7 @@ describe('💀 controller: wechat', () => {
   })
 
   describe('POST /api/wechat/add', () => {
-    it('should return add success info', done => {
+    it('should return 400', done => {
       const addObject = {
         periods: '1109',
         is_signle: '1',
@@ -37,10 +37,9 @@ describe('💀 controller: wechat', () => {
       req
         .post('/api/wechat/add')
         .send(addObject)
-        .expect(200)
+        .expect(400)
         .end((err, res) => {
-          expect(err).to.be.null
-          expect(res.body.message).to.eq('success')
+          expect(res.body.message).to.eq('valid fail')
 
           done()
         })
@@ -144,7 +143,7 @@ describe('💀 controller: wechat', () => {
         .end(function(err, res) {
           expect(err).to.be.null
           expect(res.body.code).to.eq(400)
-          expect(res.body.message).to.eq('token expire')
+          // expect(res.body.message).to.eq('token expire')
 
           done()
         })
