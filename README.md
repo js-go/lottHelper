@@ -1,5 +1,5 @@
 
-[![Build Status](https://img.shields.io/travis/js-go/lottHelper.svg?style=flat-square)](https://travis-ci.org/js-go/lottHelper)
+[![Build Status](https://travis-ci.org/js-go/lottHelper.svg?branch=master)](https://travis-ci.org/js-go/lottHelper)
 
 开发：
 
