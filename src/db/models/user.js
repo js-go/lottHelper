@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
     address: { type: Sequelize.STRING },
     city: { type: Sequelize.STRING },
     province: { type: Sequelize.STRING },
-    avatar_url: { type: Sequelize.STRING }
+    avatar_url: { type: Sequelize.STRING },
+    credit: { type: Sequelize.STRING } // 积分
   })
 
   return User

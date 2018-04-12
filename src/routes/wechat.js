@@ -7,13 +7,13 @@ const wechatRouter = new Router({
 })
 
 wechatRouter.get('/', Api.helloWorld)
-wechatRouter.get('/list', Api.listNumbers)
-wechatRouter.get('/list/:page', Api.listNumbers)
+wechatRouter.get('/list', userRequire, Api.listNumbers)
+wechatRouter.get('/list/:page', userRequire, Api.listNumbers)
 wechatRouter.get('/uptoken', Api.uptoken)
-
-wechatRouter.post('/ocr', Api.ocr)
-wechatRouter.post('/loginByWechat', Api.loginByWechat)
-wechatRouter.post('/add', Api.addNumbers)
 wechatRouter.get('/userRequire', userRequire, ctx => (ctx.body = 'test'))
+
+wechatRouter.post('/loginByWechat', Api.loginByWechat)
+wechatRouter.post('/add', userRequire, Api.addNumbers)
+wechatRouter.post('/ocr', Api.ocr)
 
 module.exports = wechatRouter

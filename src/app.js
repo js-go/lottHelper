@@ -23,7 +23,7 @@ exports.runDependency = function runDependency() {
   return Promise.all([
     db.client
       .sync({
-        force: !true
+        force: false
       })
       .catch(err => {
         if (err) {

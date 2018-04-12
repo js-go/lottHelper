@@ -9,6 +9,15 @@ const loginSchema = Joi.object().keys({
   encryptedData: Joi.string().required()
 })
 
+const addNumbersSchema = Joi.object().keys({
+  periods: Joi.string().required(),
+  is_signle: Joi.string().required(),
+  species: Joi.string().required(),
+  numbers: Joi.string().required(),
+  name: Joi.string().required(),
+  cid: Joi.string().required()
+})
+
 module.exports = {
   helloWorld: function(ctx, next) {
     ctx.body = {
@@ -97,33 +106,51 @@ module.exports = {
       })
   },
   addNumbers: function(ctx, next) {
+    const valid = Joi.validate(ctx.request.body, addNumbersSchema)
+    if (valid.error) {
+      ctx.status = 400
+      return ctx.body = {
+        message: 'request body error',
+        status: 'fail'
+      }
+    }
     const {
       periods,
       is_signle,
       species,
       numbers,
       name,
-      user_id
-    } = ctx.request.body
-
-    const addObject = {
-      periods: periods,
-      is_signle: is_signle,
-      numbers: numbers,
-      name: name,
-      user_id: user_id,
-      species: species
+      cid
+    } = valid.value
+    const user_id = ctx.state.user.openid
+    
+    if (!user_id) {
+      ctx.state = 401
+      return ctx.body = {
+        code: 401,
+        message: 'User Unauthenticated'
+      }
     }
 
     return wechatService
-      .addNumbers(addObject)
+      .addNumbers({
+        periods: periods,
+        is_signle: is_signle,
+        species: species,
+        numbers: numbers,
+        name: name,
+        user_id: user_id,
+        cid: cid
+      })
       .then(result => {
+        ctx.status = 200;
         ctx.body = {
           code: 200,
           message: 'success'
         }
       })
       .catch(err => {
+        ctx.status = 500
         ctx.body = {
           code: 500,
           message: err
@@ -133,14 +160,16 @@ module.exports = {
   listNumbers: function(ctx, next) {
     let limit = 5 // number of records per page
     let offset = 0
+    const user_id = ctx.state.user.openid
     return wechatService
       .listNumbers({
         page: ctx.params.page || 1,
-        user_id: 1,
+        user_id: user_id,
         limit,
         offset
       })
       .then(result => {
+        ctx.status = 200
         ctx.body = {
           code: 200,
           message: 'success',
@@ -150,6 +179,7 @@ module.exports = {
         }
       })
       .catch(err => {
+        ctx.status = 500
         ctx.body = {
           code: 500,
           message: err
@@ -162,12 +192,14 @@ module.exports = {
     ctx.set('Pragma', 'no-cache')
     ctx.set('Expires', 0)
     if (token) {
+      ctx.status = 200
       return (ctx.body = {
         code: 200,
         message: 'success',
         uptoken: token
       })
     }
+    ctx.status = 500
     return (ctx.body = {
       code: 500,
       message: 'failed'
@@ -176,11 +208,13 @@ module.exports = {
   ocr: function (ctx) {
     const { url } = ctx.request.body
     return wechatService.ocr(url).then((result) => {
+      ctx.status = 200
       ctx.body = {
         list: JSON.stringify(result.words_result)
       }
     })
     .catch( e => {
+      ctx.status = 500
       ctx.body = {
         code: 500,
         message: 'failed'
