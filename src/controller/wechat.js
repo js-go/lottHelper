@@ -208,21 +208,16 @@ module.exports = {
   ocr: function (ctx) {
     const { url } = ctx.request.body
     return wechatService.ocr(url).then((result) => {
-<<<<<<< HEAD
-      ctx.status = 200
-      ctx.body = {
-        list: JSON.stringify(result.words_result)
-=======
       result = JSON.stringify(result.words_result)
       if (/福彩|体育彩?/.test(result)) {
         return ctx.body = {
           list: result
         }
       }
+      ctx.status = 400
       return ctx.body = {
          code: 400,
          message: '这不是彩票'
->>>>>>> 721a3f95b5f8977e8c6a5e32b430bde1cfeea0a2
       }
     })
     .catch( e => {
